@@ -2,6 +2,7 @@ package com.github.mgurov;
 
 import org.junit.Test;
 import org.reactivestreams.Publisher;
+import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.UnicastProcessor;
@@ -16,7 +17,7 @@ public class AppTest {
 
     @Test
     public void customEmitter() {
-        UnicastProcessor<String> processor = UnicastProcessor.create();
+        DirectProcessor<String> processor = DirectProcessor.create();
 
         processor.subscribe(s -> {
             System.out.println("caught emission: " + s);
