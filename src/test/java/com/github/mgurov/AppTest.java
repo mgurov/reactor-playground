@@ -2,8 +2,6 @@ package com.github.mgurov;
 
 import org.junit.Test;
 import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 import reactor.core.publisher.*;
 import reactor.util.function.Tuple2;
 
