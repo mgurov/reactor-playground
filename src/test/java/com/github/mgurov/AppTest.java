@@ -5,6 +5,7 @@ import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -13,7 +14,9 @@ public class AppTest {
 
     @Test
     public void checkReactorIsDoing() {
-        Flux<String> seq1 = Flux.just("foo", "bar", "foobar");
+        Flux<String> seq1 = Flux.interval(Duration.ofSeconds(1))
+                .zipWith(Flux.just("foo", "bar", "foobar"))
+                .map(Tuple2::getT2);
 
         List<String> iterable = Arrays.asList("foo", "bar", "foobar");
         Flux<String> seq2 = Flux.fromIterable(iterable);
@@ -40,6 +43,8 @@ public class AppTest {
         zipped.subscribe((t) -> {
             System.out.println("zipped: " + t);}
         );
+
+        composed.blockLast();
 
     }
 }
