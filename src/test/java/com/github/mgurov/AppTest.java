@@ -3,6 +3,8 @@ package com.github.mgurov;
 import org.junit.Test;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.UnicastProcessor;
 import reactor.util.function.Tuple2;
 
 import java.time.Duration;
@@ -11,6 +13,20 @@ import java.util.List;
 import java.util.function.Function;
 
 public class AppTest {
+
+    @Test
+    public void customEmitter() {
+        UnicastProcessor<String> processor = UnicastProcessor.create();
+
+        processor.subscribe(s -> {
+            System.out.println("caught emission: " + s);
+        });
+
+        FluxSink<String> sink = processor.sink();
+
+        System.out.println("About to emit blah");
+        sink.next("blah");
+    }
 
     @Test
     public void checkReactorIsDoing() {
