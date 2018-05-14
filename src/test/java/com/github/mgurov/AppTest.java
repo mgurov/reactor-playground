@@ -1,38 +1,23 @@
 package com.github.mgurov;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
+import reactor.core.publisher.Flux;
+import reactor.util.function.Tuple2;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+import java.util.Arrays;
+import java.util.List;
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+public class AppTest {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    @Test
+    public void checkReactorIsDoing() {
+        Flux<String> seq1 = Flux.just("foo", "bar", "foobar");
+
+        List<String> iterable = Arrays.asList("foo", "bar", "foobar");
+        Flux<String> seq2 = Flux.fromIterable(iterable);
+
+        Tuple2<String, String> result = seq1.zipWith(seq2).blockLast();
+
+        System.out.println(result);
     }
 }
