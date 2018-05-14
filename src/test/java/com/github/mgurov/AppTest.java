@@ -2,10 +2,9 @@ package com.github.mgurov;
 
 import org.junit.Test;
 import org.reactivestreams.Publisher;
-import reactor.core.publisher.DirectProcessor;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
-import reactor.core.publisher.UnicastProcessor;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+import reactor.core.publisher.*;
 import reactor.util.function.Tuple2;
 
 import java.time.Duration;
@@ -14,6 +13,48 @@ import java.util.List;
 import java.util.function.Function;
 
 public class AppTest {
+
+    public Function<Flux<Long>, Publisher<String>> convertStrings = ints ->
+            ints.zipWith(Flux.range(1, 4))
+            .flatMap(t -> {
+                System.out.println("monoiing:" + t);
+                return Mono.just("monoided: " + t.getT1());
+            });
+
+    @Test
+    public void joiningTwoStreams() {
+
+        Flux<Long> input = Flux.interval(Duration.ofSeconds(1)).map(i -> i * 10L);
+
+        Publisher<String> output = convertStrings.apply(input);
+
+//        output.subscribe(new Subscriber<String>() {
+//            @Override
+//            public void onSubscribe(Subscription subscription) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                System.out.println("next: " + s);
+//            }
+//
+//            @Override
+//            public void onError(Throwable throwable) {
+//                System.out.println("error: " + throwable);
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//                System.out.println("complete");
+//            }
+//        });
+
+        Flux<String> actualThing = (Flux<String>) output;
+
+        actualThing.blockLast();
+
+    }
 
     @Test
     public void customEmitter() {
