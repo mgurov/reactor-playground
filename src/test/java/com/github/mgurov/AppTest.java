@@ -16,8 +16,10 @@ public class AppTest {
         List<String> iterable = Arrays.asList("foo", "bar", "foobar");
         Flux<String> seq2 = Flux.fromIterable(iterable);
 
-        Tuple2<String, String> result = seq1.zipWith(seq2).blockLast();
+        Flux<Tuple2<String, String>> zipped = seq1.zipWith(seq2);
 
-        System.out.println(result);
+        zipped.subscribe((t) -> {
+            System.out.println("zipped: " + t);}
+            );
     }
 }
